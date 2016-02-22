@@ -1,0 +1,169 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="my-meet">
+  
+  
+  <template>
+    <iron-ajax 
+                id="maj";
+                url="http://localhost:4000/meet.js"
+                  handle-as="json"
+                  last-response="{{ajaxResponsess}}"
+                  on-response="handleMeetResponse"
+                  verbose></iron-ajax>
+              <div> {{ajaxResponsess.0.eventName}}</div>
+    <paper-material elevation="1">
+      <div class="horizontal-section">
+        <iron-selector selected="0" attr-for-selected="name" on-iron-select="itemSelected" id="isel">
+          <paper-checkbox checked on-click="showGender" id="chkMen">Men</paper-checkbox>
+
+          <paper-checkbox checked on-click="showGender" id="chkWomen"> Women</paper-checkbox>
+          
+        </iron-selector>
+      </div>
+    </paper-material>
+    <template is="dom-repeat" id="meetTemp" sort="_computeSort" filter="{{_filterGender(filterString)}}" >
+        <paper-toolbar><span class="title">{{getCategory(item)}}</span></paper-toolbar>
+        <vaadin-grid selection-mode="single" id="{{getId(item)}}" items={{item}} on-selected-items-changed="athListenerMethod">
+          <table>
+            <colgroup>
+            
+              <col sortable name="name">
+              <col sortable name="snatch">
+              <col sortable name="cj">
+              <col sortable name="total">
+              <col sortable name="rank">
+              
+             
+            </colgroup>
+          </table>
+        </vaadin-grid> 
+    </template>
+  </template>
+ 
+
+  <script>
+    
+    Polymer({
+      is: 'my-meet',
+      properties: {
+        athleteId: {
+          type: Number,
+          reflectToAttribute: true,
+          notify: true
+        },
+        meetId: {
+          type: Number,
+          notify: true,
+          observer: '_getData'
+        },
+        filterObj: {
+          type:  String,
+          notify: true,
+          value: "MtrueWtrue"
+        }
+        
+    },
+    _computeSort: function(a,b) {
+      if (a[0].gender != b[0].gender) {
+        return a[0].gender == "W" ? -1 : 1;
+      }
+      else {
+        //var sorted = [a[0].category, b[0].category].sort();
+        if(a[0].category.charAt(0) == "p") {
+          return 1;
+        }
+        if (+a[0].category>+b[0].category) {
+          return 1;
+        }
+        else {
+          return -1;
+        }
+      }
+
+    },
+    getCategory: function(arr) {
+      return arr[0].gender + " " + arr[0].category;
+    },
+    getId: function(arr) {
+      return arr[0].gender + arr[0].category;
+    },
+     _getData: function (newValue, oldValue) {
+        
+          this.$.maj.params  = {"t": 1, "meetId": newValue };
+          this.$.maj.generateRequest();
+        
+      },
+      athListenerMethod: function(ev) {
+        var selected = ev.currentTarget.selection.selected();
+        if (selected.length == 1) {
+        
+          var selectedIndex = selected[0];
+          ev.currentTarget.getItem(selectedIndex, function(err, item) {
+            if (!err) {
+              app.selected = item;
+              this.athleteId = item.athleteId;
+              page.show("/athlete/" + item.athleteId);
+            } else {
+              console.log(err);
+            }
+          });
+        } else {
+          app.selected = null;
+        }
+      },
+      _filterGender: function(filterString) {
+        return function(cat) {
+          
+          if (cat[0].gender =="M") {
+            return chkMen.checked;
+          }
+          else {
+            return chkWomen.checked;
+          }
+          
+        };
+      },
+      showGender: function(ev) {
+        this.filterString = "M" + chkMen.checked + "W" + chkWomen.checked;
+      },
+      handleMeetResponse : function(ev) {
+        
+        var meetJson = this.$.maj.lastResponse;
+        var ObjMeet = {};
+
+        meetJson.reduce(function(previousValue, currentValue, currentIndex, array) {
+          if(!ObjMeet.hasOwnProperty(currentValue.gender + currentValue.category)) {
+            ObjMeet[currentValue.gender + currentValue.category] = [currentValue];
+          }
+          else {
+            ObjMeet[currentValue.gender + currentValue.category].push(currentValue);
+          }
+          return ObjMeet;
+        }, meetJson[0]);
+        var arrMeet = Object.keys(ObjMeet).map(function(value) { return ObjMeet[value] });
+
+        this.$.meetTemp.items =  arrMeet;
+        //this.$.meetTemp.render();
+        
+        var gold = "#FFD700";
+        
+      }
+
+      
+    });
+  
+  </script>
+
+</dom-module>

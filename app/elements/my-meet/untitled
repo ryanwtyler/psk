@@ -1,0 +1,82 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="my-meet">
+  
+  <template id="my-meet">
+    <iron-ajax 
+          id="maj";
+          url="http://localhost:4000/meet.js"
+            handle-as="json"
+            last-response="{{ajaxResponsess}}"
+            on-response="handleMeetResponse"
+            params={"t": 1, "meetId": [[meetId]]}
+            verbose></iron-ajax>  
+    <div> Meet: </div>
+    <template is="dom-repeat" items="{{wc}}">
+        <paper-toolbar><span class="title">{{wc}}</span></paper-toolbar>
+        <vaadin-grid id="{{wc}}" selection-mode="single" on-selected-items-changed="athListenerMethod">
+          <table>
+            <colgroup>
+            
+              <col sortable name="name">
+              <col sortable name="category">
+              <col sortable name="snatch">
+              <col sortable name="cj">
+              <col sortable name="total">
+              <col sortable name="rank">
+              
+             
+            </colgroup>
+          </table>
+        </vaadin-grid> 
+    </template>
+
+  </template>
+
+  <script>
+    app.handleMeetResponse = function(ev) {
+        
+        var meetJson = app.ajaxResponsess;
+        var ObjMeet = {};
+        meetJson.reduce(function(previousValue, currentValue, currentIndex, array) {
+          if(!ObjMeet.hasOwnProperty(currentValue.gender + currentValue.category)) {
+            ObjMeet[currentValue.gender + currentValue.category] = [currentValue];
+          }
+          else {
+            ObjMeet[currentValue.gender + currentValue.category].push(currentValue);
+          }
+            return ObjMeet;
+        });
+
+        for (var i = 0; i < arrWc.length; i++ ) {
+          if (typeof ObjMeet[arrWc[i]] != "undefined") {
+            this.$[arrWc[i]].items = ObjMeet[arrWc[i]];
+          }
+        }
+        console.log(ObjMeet);
+      };
+    Polymer({
+      is: 'my-meet',
+
+      ready: function() {
+        console.log("HI");
+        
+        this.wc = ['W48', 'W53', 'W63', 'W69', 'W75', 'Wp75', 'M56', 'M62', 'M69', 'M77', 'M85', 'M94', 'M105', 'Mp105'];
+        
+        
+      }
+    });
+  </script>
+
+</dom-module>

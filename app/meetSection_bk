@@ -1,0 +1,169 @@
+{{ajaxResponsess.0.eventName}}
+                 <iron-ajax 
+                      id="maj";
+                      url="http://localhost:4000/meet.js"
+                        handle-as="json"
+                        last-response="{{ajaxResponsess}}"
+                        on-response="handleMeetResponse"
+                        verbose></iron-ajax>
+                
+
+                
+                  <button on-click="foggle()" id="btnTogMen">toggle collapse</button>
+                  <iron-collapse id="menSection">
+                  <paper-toolbar><span class="title">94 KG Men</span></paper-toolbar>
+                    <vaadin-grid id="M94" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                      <table>
+                        <colgroup>
+                        
+                          <col sortable name="name">
+                          <col sortable name="category">
+                          <col sortable name="snatch">
+                          <col sortable name="cj">
+                          <col sortable name="total">
+                          <col sortable name="rank">
+                        </colgroup>
+                      </table>
+                    </vaadin-grid>
+                    <paper-toolbar><span class="title">105 KG Men</span></paper-toolbar>
+                    <vaadin-grid id="M105" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                      <table>
+                        <colgroup>
+                        
+                          <col sortable name="name">
+                          <col sortable name="category">
+                          <col sortable name="snatch">
+                          <col sortable name="cj">
+                          <col sortable name="total">
+                          <col sortable name="rank">
+                        </colgroup>
+                      </table>
+                    </vaadin-grid>
+                    <paper-toolbar><span class="title">105+ KG Men</span></paper-toolbar>
+                    <vaadin-grid id="Mp105" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                      <table>
+                        <colgroup>
+                        
+                          <col sortable name="name">
+                          <col sortable name="category">
+                          <col sortable name="snatch">
+                          <col sortable name="cj">
+                          <col sortable name="total">
+                          <col sortable name="rank">
+                        </colgroup>
+                      </table>
+                    </vaadin-grid>
+                    </iron-collapse>
+                    <paper-toolbar><span class="title">48 KG Women</span></paper-toolbar>
+                        <vaadin-grid id="W48" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                          <table>
+                            <colgroup>
+                            
+                              <col sortable name="name">
+                              <col sortable name="category">
+                              <col sortable name="snatch">
+                              <col sortable name="cj">
+                              <col sortable name="total">
+                              <col sortable name="rank">
+                            </colgroup>
+                          </table>
+                          
+                        </vaadin-grid>
+
+                    <paper-toolbar><span class="title">53 KG Women</span></paper-toolbar>
+                        <vaadin-grid id="W53" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                          <table>
+                            <colgroup>
+                            
+                              <col sortable name="name">
+                              <col sortable name="category">
+                              <col sortable name="snatch">
+                              <col sortable name="cj">
+                              <col sortable name="total">
+                              <col sortable name="rank">
+                              
+                             
+                            </colgroup>
+                          </table>
+                        </vaadin-grid>  
+
+                    <paper-toolbar><span class="title">58 KG Women</span></paper-toolbar>
+                    <vaadin-grid id="W58" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                      <table>
+                        <colgroup>
+                        
+                          <col sortable name="name">
+                          <col sortable name="category">
+                          <col sortable name="snatch">
+                          <col sortable name="cj">
+                          <col sortable name="total">
+                          <col sortable name="rank">
+                          
+                         
+                        </colgroup>
+                      </table>
+                    </vaadin-grid>  
+                    <paper-toolbar><span class="title">63 KG Women</span></paper-toolbar>
+                    <vaadin-grid id="W63" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                      <table>
+                        <colgroup>
+                        
+                          <col sortable name="name">
+                          <col sortable name="category">
+                          <col sortable name="snatch">
+                          <col sortable name="cj">
+                          <col sortable name="total">
+                          <col sortable name="rank">
+                          
+                         
+                        </colgroup>
+                      </table>
+                    </vaadin-grid> 
+                    <paper-toolbar><span class="title">69 KG Women</span></paper-toolbar>
+                    <vaadin-grid id="W69" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                      <table>
+                        <colgroup>
+                        
+                          <col sortable name="name">
+                          <col sortable name="category">
+                          <col sortable name="snatch">
+                          <col sortable name="cj">
+                          <col sortable name="total">
+                          <col sortable name="rank">
+                          
+                         
+                        </colgroup>
+                      </table>
+                    </vaadin-grid> 
+                    <paper-toolbar><span class="title">75 KG Women</span></paper-toolbar>
+                    <vaadin-grid id="W75" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                      <table>
+                        <colgroup>
+                        
+                          <col sortable name="name">
+                          <col sortable name="category">
+                          <col sortable name="snatch">
+                          <col sortable name="cj">
+                          <col sortable name="total">
+                          <col sortable name="rank">
+                          
+                         
+                        </colgroup>
+                      </table>
+                    </vaadin-grid> 
+                    <paper-toolbar><span class="title">75+ KG Women</span></paper-toolbar>
+                    <vaadin-grid id="Wp75" selection-mode="single" on-selected-items-changed="athListenerMethod">
+                      <table>
+                        <colgroup>
+                        
+                          <col sortable name="name">
+                          <col sortable name="category">
+                          <col sortable name="snatch">
+                          <col sortable name="cj">
+                          <col sortable name="total">
+                          <col sortable name="rank">
+                          
+                         
+                        </colgroup>
+                      </table>
+                    </vaadin-grid> 

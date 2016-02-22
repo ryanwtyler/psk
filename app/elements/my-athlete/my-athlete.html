@@ -1,0 +1,120 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
+<dom-module id="my-athlete">
+	<template>
+	    <paper-material elevation="1">
+			<h2 class="page-title">{{ajaxResponsesss.0.name}}</h2>
+		     <iron-ajax 
+		          id="aaj"
+		          url="http://localhost:4000/meet.js"
+		            handle-as="json"
+		            on-response="handleAthResponse"
+		            last-response="{{ajaxResponsesss}}">
+		            verbose</iron-ajax>
+		      
+		    <vaadin-grid id="athGrid" selection-mode="single" on-selected-items-changed="listenerMethod" on-sort-order-changed="sortGrid">
+		      <table>
+		        <colgroup>
+		          <col sortable name="eventName" >
+		          <col sortable name="dateHeld" >
+		          <col sortable name="snatch">
+		          <col sortable name="cj">
+		          <col sortable name="total">
+		          <col sortable name="rank">
+		          
+		         
+		        </colgroup>
+		      </table>
+		      
+		    </vaadin-grid>
+		    
+		</paper-material>
+	</template>
+	<script>
+    
+    Polymer({
+      is: 'my-athlete',
+
+      properties: {
+	    athleteId: {
+	      type: Number,
+	      notify: true,
+	      observer: '_getData'
+	    },
+	    data: {
+	    	type: Array
+	    }
+	  },
+
+	  _getData: function(newValue, oldValue) {
+	  	if(newValue != oldValue) {
+		    this.$.aaj.params = {"t": 2, "athleteId": newValue };
+		    this.$.aaj.generateRequest();
+		 }
+	  },
+
+	  listenerMethod: function(ev) {
+        var selected = ev.currentTarget.selection.selected();
+        if (selected.length == 1) {
+      
+          var selectedIndex = selected[0];
+          ev.currentTarget.getItem(selectedIndex, function(err, item) {
+            if (!err) {
+              app.selected = item;
+              app.meetId = item.eventId
+              //app.$.maj.params  = {"t": 1, "meetId": app.meetId };
+              //app.$.maj.generateRequest();
+              page.show("/meet/" + app.meetId);
+              
+          } 
+          else {
+            console.log(err);
+          }
+        });
+      } else {
+        app.selected = null;
+      }
+    },
+
+    sortGrid: function(ev) {
+    	var grid = ev.currentTarget;
+	    var idx = grid.sortOrder[0].column;
+	    var lesser = grid.sortOrder[0].direction == 'asc' ? -1 : 1;
+		
+		var mapped = this.$.data.map(function(el, i) {
+		  el["sortCol"] = grid.columns[idx].name;
+		  return el;
+		})
+        this.$.data.sort(function(a, b) {
+        if (a.sortCol == "dateHeld") {
+        	return (new Date(a[a.sortCol] ) < new Date(b[b.sortCol] )) ? lesser : -lesser;
+        }
+          return (a[a.sortCol] < b[b.sortCol]) ? lesser : -lesser;
+        });
+	},
+	  handleAthResponse : function(ev) {
+	    
+	    var athJson = this.$.aaj.lastResponse;
+	    
+	    this.$.data = athJson;
+	    this.$.athGrid.items =  this.$.data;
+	    
+	    
+	  }
+       
+      });
+  	
+
+  </script>
+</dom-module>
