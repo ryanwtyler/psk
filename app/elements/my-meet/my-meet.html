@@ -45,9 +45,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </paper-material>
     
-    <template is="dom-repeat" id="meetTemp" sort="_computeSort" filter="{{_filterGender(filterString)}}" >
+    <template is="dom-repeat" id="meetTemp" sort="_computeSort" filter="{{_filterGender(filterString)}}" items="{{meetData}}">
         <paper-toolbar><span class="title">{{getCategory(item)}}</span></paper-toolbar>
-        <vaadin-grid selection-mode="single" id="{{getId(item)}}" items={{item}} on-selected-items-changed="athListenerMethod">
+        <vaadin-grid selection-mode="single" id="{{getId(item)}}" items={{item}} on-selected-items-changed="athListenerMethod" on-sort-order-changed="_sortResponses">
           <table>
             <colgroup>
             
@@ -85,6 +85,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type:  String,
           notify: true,
           value: "MtrueWtrue"
+        },
+        meetData: {
+          type: Array,
+          notify: true
         }
         
     },
@@ -149,6 +153,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           
         };
       },
+      _sortResponses: function (ev) {
+        var grid = ev.currentTarget;
+        var idx = grid.sortOrder[0].column;
+        var lesser = grid.sortOrder[0].direction == 'asc' ? -1 : 1;
+        var l_data = this.$.meetTemp.itemForElement(ev.currentTarget);
+        var mapped = l_data.map(function(el, i) {
+          el["sortCol"] = grid.columns[idx].name;
+          return el;
+        })
+          l_data.sort(function(a, b) {
+          if (a.sortCol == "dateHeld") {
+            return (new Date(a[a.sortCol] ) < new Date(b[b.sortCol] )) ? lesser : -lesser;
+          }
+            return (parseInt(a[a.sortCol]) < parseInt(b[b.sortCol])) ? lesser : -lesser;
+          });
+      },
       showGender: function(ev) {
         this.filterString = "M" + tabMen.active + "W" + tabWomen.focused;
       },
@@ -174,9 +194,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }, meetJson[0]);
         var arrMeet = Object.keys(ObjMeet).map(function(value) { return ObjMeet[value] });
 
-        this.$.meetTemp.items =  arrMeet;
+        //this.$.meetTemp.items =  arrMeet;
         //this.$.meetTemp.render();
-        
+        this.meetData = arrMeet;
         
 
         //execute the code below after the ajax request is complete
